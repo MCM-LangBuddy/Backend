@@ -5,9 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -16,7 +16,8 @@ import javax.persistence.Id;
 @Builder
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
     private String firstName;
@@ -25,6 +26,12 @@ public class User {
 
     private String password;
     private String profilePictureUrl;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Language> spokenLanguages = new HashSet<Language>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    Set<Language> learningLanguages = new HashSet<Language>();
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;

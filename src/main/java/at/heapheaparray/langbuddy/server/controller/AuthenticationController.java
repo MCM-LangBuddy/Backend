@@ -1,5 +1,6 @@
 package at.heapheaparray.langbuddy.server.controller;
 
+import at.heapheaparray.langbuddy.server.dao.models.Language;
 import at.heapheaparray.langbuddy.server.dao.models.User;
 import at.heapheaparray.langbuddy.server.dao.repositories.UserRepository;
 import at.heapheaparray.langbuddy.server.dto.response.AuthSuccess;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,12 +32,20 @@ public class AuthenticationController {
         if(existing!=null) {
             return new AuthSuccess("Username exists!");
         }
+
         User newUser = User.builder()
                 .userName(data.getUserName())
                 .firstName(data.getFirstName())
                 .lastName(data.getLastName())
                 .password(passwordEncoder.encode(data.getPassword()))
                 .build();
+
+        if(data.getSpokenLanguageIds() != null) {
+                newUser.setSpokenLanguages(data.getSpokenLanguageIds().stream().map(Language::new).collect(Collectors.toSet()));
+        }
+        if(data.getLearningLanguageIds() != null) {
+            newUser.setLearningLanguages(data.getLearningLanguageIds().stream().map(Language::new).collect(Collectors.toSet()));
+        }
 
         userRepository.save(newUser);
 
