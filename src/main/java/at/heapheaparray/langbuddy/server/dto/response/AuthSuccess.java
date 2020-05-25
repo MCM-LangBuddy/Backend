@@ -1,4 +1,4 @@
-package at.heapheaparray.langbuddy.server.models.dto;
+package at.heapheaparray.langbuddy.server.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthSuccess {
     private String message;
-    private Integer userId;
+    private Long userId;
 
     public AuthSuccess(String message) {
         this.message = message;

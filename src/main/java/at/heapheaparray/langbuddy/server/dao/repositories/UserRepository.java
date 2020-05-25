@@ -1,8 +1,13 @@
 package at.heapheaparray.langbuddy.server.dao.repositories;
 
+import at.heapheaparray.langbuddy.server.dao.models.Language;
 import at.heapheaparray.langbuddy.server.dao.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Set;
+
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUserName(String username);
+    User findByEmail(String email);
+    List<User> findAllBySpokenLanguagesInAndIdNotIn(Set<Language> languages, Set<Long> blockedIds);
 }

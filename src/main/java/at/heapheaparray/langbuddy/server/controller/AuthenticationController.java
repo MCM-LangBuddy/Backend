@@ -1,15 +1,18 @@
 package at.heapheaparray.langbuddy.server.controller;
 
+import at.heapheaparray.langbuddy.server.dao.models.Language;
 import at.heapheaparray.langbuddy.server.dao.models.User;
 import at.heapheaparray.langbuddy.server.dao.repositories.UserRepository;
-import at.heapheaparray.langbuddy.server.models.dto.AuthSuccess;
-import at.heapheaparray.langbuddy.server.models.dto.LoginRequest;
-import at.heapheaparray.langbuddy.server.models.dto.RegisterRequest;
+import at.heapheaparray.langbuddy.server.dto.response.AuthSuccess;
+import at.heapheaparray.langbuddy.server.dto.requests.LoginRequest;
+import at.heapheaparray.langbuddy.server.dto.requests.RegisterRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -25,16 +28,24 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public AuthSuccess register(@RequestBody RegisterRequest data) {
-        User existing = userRepository.findByUserName(data.getUserName());
+        User existing = userRepository.findByEmail(data.getEmail());
         if(existing!=null) {
             return new AuthSuccess("Username exists!");
         }
+
         User newUser = User.builder()
-                .userName(data.getUserName())
+                .email(data.getEmail())
                 .firstName(data.getFirstName())
                 .lastName(data.getLastName())
                 .password(passwordEncoder.encode(data.getPassword()))
                 .build();
+
+        if(data.getSpokenLanguageIds() != null) {
+                newUser.setSpokenLanguages(data.getSpokenLanguageIds().stream().map(Language::new).collect(Collectors.toSet()));
+        }
+        if(data.getLearningLanguageIds() != null) {
+            newUser.setLearningLanguages(data.getLearningLanguageIds().stream().map(Language::new).collect(Collectors.toSet()));
+        }
 
         userRepository.save(newUser);
 
@@ -43,7 +54,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public AuthSuccess login(@RequestBody LoginRequest data) {
-        User testUser = userRepository.findByUserName(data.getUserName());
+        User testUser = userRepository.findByEmail(data.getEmail());
         if(testUser!=null && passwordEncoder.matches(data.getPassword(), testUser.getPassword())) {
             return new AuthSuccess("Success", testUser.getId());
         }
