@@ -1,0 +1,62 @@
+package at.heapheaparray.langbuddy.server.controller;
+
+import at.heapheaparray.langbuddy.server.dao.models.Language;
+import at.heapheaparray.langbuddy.server.dao.models.User;
+import at.heapheaparray.langbuddy.server.dao.repositories.UserRepository;
+import at.heapheaparray.langbuddy.server.dto.response.UserSuggestion;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/matching")
+public class MatchingController {
+    private final UserRepository userRepository;
+
+    public MatchingController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping("/openMatches/{userId}")
+    public List<UserSuggestion> getOpenMatches(@PathVariable(name = "userId") Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        Set<Long> discardedUsers = new HashSet<>();
+        discardedUsers.add(user.getId());
+        discardedUsers.addAll(user.getDiscardedUsers().stream().map(User::getId).collect(Collectors.toList()));
+        discardedUsers.addAll(user.getMatchedUsers().stream().map(User::getId).collect(Collectors.toList()));
+
+        return userRepository.findAllBySpokenLanguagesInAndIdNotIn(user.getLearningLanguages(), discardedUsers).stream()
+                .map(userRaw -> UserSuggestion.builder().emailAddress(userRaw.getEmail())
+                    .learningLanguages(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                    .spokenLanguages(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                    .userId(userRaw.getId())
+                    .firstName(userRaw.getFirstName()).build())
+                .collect(Collectors.toList());
+    }
+
+    @PutMapping("/discardMatch/{userId}")
+    public void discardMatch(@PathVariable(name = "userId") Long userId,
+                             @RequestParam(name = "otherUserId") Long otherUserId) {
+        User currentUser = userRepository.findById(userId).orElseThrow();
+        User otherUser = userRepository.findById(otherUserId).orElseThrow();
+
+        currentUser.getDiscardedUsers().add(otherUser);
+
+        userRepository.save(currentUser);
+    }
+
+    @PutMapping("/acceptMatch/{userId}")
+    public void acceptMatch(@PathVariable(name = "userId") Long userId,
+                             @RequestParam(name = "otherUserId") Long otherUserId) {
+        User currentUser = userRepository.findById(userId).orElseThrow();
+        User otherUser = userRepository.findById(otherUserId).orElseThrow();
+
+        currentUser.getMatchedUsers().add(otherUser);
+
+        userRepository.save(currentUser);
+    }
+}

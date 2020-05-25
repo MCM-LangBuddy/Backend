@@ -24,4 +24,12 @@ public class Language {
     public Language(Long id) {
         this.id = id;
     }
+
+    public static at.heapheaparray.langbuddy.server.dto.response.Language toDto(Language language) {
+        return at.heapheaparray.langbuddy.server.dto.response.Language.builder()
+                .clearName(language.clearName)
+                .shortName(language.shortName)
+                .id(language.id)
+                .build();
+    }
 }

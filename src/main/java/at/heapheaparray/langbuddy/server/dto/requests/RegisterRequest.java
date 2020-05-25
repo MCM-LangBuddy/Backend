@@ -8,7 +8,7 @@ import java.util.Set;
 public class RegisterRequest {
     private String firstName;
     private String lastName;
-    private String userName;
+    private String email;
     private Set<Long> spokenLanguageIds;
     private Set<Long> learningLanguageIds;
     private String password;

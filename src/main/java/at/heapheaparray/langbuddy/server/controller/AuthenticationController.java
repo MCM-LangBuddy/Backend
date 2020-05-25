@@ -28,13 +28,13 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public AuthSuccess register(@RequestBody RegisterRequest data) {
-        User existing = userRepository.findByUserName(data.getUserName());
+        User existing = userRepository.findByEmail(data.getEmail());
         if(existing!=null) {
             return new AuthSuccess("Username exists!");
         }
 
         User newUser = User.builder()
-                .userName(data.getUserName())
+                .email(data.getEmail())
                 .firstName(data.getFirstName())
                 .lastName(data.getLastName())
                 .password(passwordEncoder.encode(data.getPassword()))
@@ -54,7 +54,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public AuthSuccess login(@RequestBody LoginRequest data) {
-        User testUser = userRepository.findByUserName(data.getUserName());
+        User testUser = userRepository.findByEmail(data.getEmail());
         if(testUser!=null && passwordEncoder.matches(data.getPassword(), testUser.getPassword())) {
             return new AuthSuccess("Success", testUser.getId());
         }

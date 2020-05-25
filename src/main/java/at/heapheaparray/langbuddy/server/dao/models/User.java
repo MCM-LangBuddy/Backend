@@ -1,9 +1,6 @@
 package at.heapheaparray.langbuddy.server.dao.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -22,7 +19,7 @@ public class User {
 
     private String firstName;
     private String lastName;
-    private String userName;
+    private String email;
 
     private String password;
     private String profilePictureUrl;
@@ -32,6 +29,14 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Language> learningLanguages = new HashSet<Language>();
+
+    @OneToMany
+    @EqualsAndHashCode.Exclude
+    Set<User> matchedUsers = new HashSet<>();
+
+    @OneToMany
+    @EqualsAndHashCode.Exclude
+    Set<User> discardedUsers = new HashSet<>();
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
