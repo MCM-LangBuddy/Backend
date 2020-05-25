@@ -1,4 +1,4 @@
-package at.heapheaparray.langbuddy.server.models.dto;
+package at.heapheaparray.langbuddy.server.dto.requests;
 
 import lombok.Data;
 

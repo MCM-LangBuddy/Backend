@@ -2,9 +2,9 @@ package at.heapheaparray.langbuddy.server.controller;
 
 import at.heapheaparray.langbuddy.server.dao.models.User;
 import at.heapheaparray.langbuddy.server.dao.repositories.UserRepository;
-import at.heapheaparray.langbuddy.server.models.dto.AuthSuccess;
-import at.heapheaparray.langbuddy.server.models.dto.LoginRequest;
-import at.heapheaparray.langbuddy.server.models.dto.RegisterRequest;
+import at.heapheaparray.langbuddy.server.dto.response.AuthSuccess;
+import at.heapheaparray.langbuddy.server.dto.requests.LoginRequest;
+import at.heapheaparray.langbuddy.server.dto.requests.RegisterRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
