@@ -31,8 +31,8 @@ public class MatchingController {
 
         return userRepository.findAllBySpokenLanguagesInAndIdNotIn(user.getLearningLanguages(), discardedUsers).stream()
                 .map(userRaw -> UserSuggestion.builder().emailAddress(userRaw.getEmail())
-                    .learningLanguages(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
-                    .spokenLanguages(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                    .learningLanguageDtos(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                    .spokenLanguageDtos(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
                     .userId(userRaw.getId())
                     .firstName(userRaw.getFirstName())
                     .profilePictureUrl(userRaw.getProfilePictureUrl()).build())
@@ -69,8 +69,8 @@ public class MatchingController {
 
         return user.getMatchedUsers().stream()
                 .map(userRaw -> UserSuggestion.builder().emailAddress(userRaw.getEmail())
-                        .learningLanguages(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
-                        .spokenLanguages(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                        .learningLanguageDtos(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                        .spokenLanguageDtos(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
                         .userId(userRaw.getId())
                         .firstName(userRaw.getFirstName())
                         .profilePictureUrl(userRaw.getProfilePictureUrl()).build())

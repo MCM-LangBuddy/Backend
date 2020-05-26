@@ -1,5 +1,6 @@
 package at.heapheaparray.langbuddy.server.dao.models;
 
+import at.heapheaparray.langbuddy.server.dto.response.LanguageDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +26,8 @@ public class Language {
         this.id = id;
     }
 
-    public static at.heapheaparray.langbuddy.server.dto.response.Language toDto(Language language) {
-        return at.heapheaparray.langbuddy.server.dto.response.Language.builder()
+    public static LanguageDto toDto(Language language) {
+        return LanguageDto.builder()
                 .clearName(language.clearName)
                 .shortName(language.shortName)
                 .id(language.id)

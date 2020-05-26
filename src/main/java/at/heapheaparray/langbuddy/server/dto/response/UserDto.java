@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Data
 @Builder
-public class UserSuggestion {
+public class UserDto {
     private String firstName;
     private String emailAddress;
     private Long userId;

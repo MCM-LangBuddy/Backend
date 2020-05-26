@@ -6,10 +6,8 @@ import at.heapheaparray.langbuddy.server.dao.repositories.UserRepository;
 import at.heapheaparray.langbuddy.server.dto.response.AuthSuccess;
 import at.heapheaparray.langbuddy.server.dto.requests.LoginRequest;
 import at.heapheaparray.langbuddy.server.dto.requests.RegisterRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import at.heapheaparray.langbuddy.server.dto.response.UserDto;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.stream.Collectors;
@@ -59,5 +57,17 @@ public class AuthenticationController {
             return new AuthSuccess("Success", testUser.getId());
         }
         return new AuthSuccess("Login failed!");
+    }
+
+    @GetMapping("/profile/{userId}")
+    public UserDto getProfile(@PathVariable(name = "userId") Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        return UserDto.builder().emailAddress(user.getEmail())
+                .learningLanguageDtos(user.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                .spokenLanguageDtos(user.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                .userId(user.getId())
+                .firstName(user.getFirstName())
+                .profilePictureUrl(user.getProfilePictureUrl()).build();
     }
 }
