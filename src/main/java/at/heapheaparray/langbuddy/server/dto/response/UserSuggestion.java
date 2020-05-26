@@ -11,6 +11,7 @@ public class UserSuggestion {
     private String firstName;
     private String emailAddress;
     private Long userId;
+    private String profilePictureUrl;
     private Set<Language> spokenLanguages;
     private Set<Language> learningLanguages;
 }

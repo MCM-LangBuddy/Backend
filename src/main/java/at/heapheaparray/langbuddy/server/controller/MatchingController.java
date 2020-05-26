@@ -34,7 +34,8 @@ public class MatchingController {
                     .learningLanguages(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
                     .spokenLanguages(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
                     .userId(userRaw.getId())
-                    .firstName(userRaw.getFirstName()).build())
+                    .firstName(userRaw.getFirstName())
+                    .profilePictureUrl(userRaw.getProfilePictureUrl()).build())
                 .collect(Collectors.toList());
     }
 
