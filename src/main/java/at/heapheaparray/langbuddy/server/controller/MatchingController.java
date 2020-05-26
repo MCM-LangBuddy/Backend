@@ -57,7 +57,23 @@ public class MatchingController {
         User otherUser = userRepository.findById(otherUserId).orElseThrow();
 
         currentUser.getMatchedUsers().add(otherUser);
+        otherUser.getMatchedUsers().add(currentUser);
 
         userRepository.save(currentUser);
+        userRepository.save(otherUser);
+    }
+
+    @GetMapping("/matches/{userId}")
+    public List<UserSuggestion> getMatches(@PathVariable(name = "userId") Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        return user.getMatchedUsers().stream()
+                .map(userRaw -> UserSuggestion.builder().emailAddress(userRaw.getEmail())
+                        .learningLanguages(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                        .spokenLanguages(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                        .userId(userRaw.getId())
+                        .firstName(userRaw.getFirstName())
+                        .profilePictureUrl(userRaw.getProfilePictureUrl()).build())
+                .collect(Collectors.toList());
     }
 }
