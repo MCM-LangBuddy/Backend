@@ -30,11 +30,11 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     Set<Language> learningLanguages = new HashSet<Language>();
 
-    @OneToMany
+    @ManyToMany
     @EqualsAndHashCode.Exclude
     Set<User> matchedUsers = new HashSet<>();
 
-    @OneToMany
+    @ManyToMany
     @EqualsAndHashCode.Exclude
     Set<User> discardedUsers = new HashSet<>();
 

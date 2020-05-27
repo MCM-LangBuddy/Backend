@@ -46,8 +46,10 @@ public class MatchingController {
         User otherUser = userRepository.findById(otherUserId).orElseThrow();
 
         currentUser.getDiscardedUsers().add(otherUser);
+        otherUser.getDiscardedUsers().add(currentUser);
 
         userRepository.save(currentUser);
+        userRepository.save(otherUser);
     }
 
     @PutMapping("/acceptMatch/{userId}")
