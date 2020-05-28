@@ -7,6 +7,7 @@ import at.heapheaparray.langbuddy.server.dto.response.AuthSuccess;
 import at.heapheaparray.langbuddy.server.dto.requests.LoginRequest;
 import at.heapheaparray.langbuddy.server.dto.requests.RegisterRequest;
 import at.heapheaparray.langbuddy.server.dto.response.UserDto;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -28,7 +29,7 @@ public class AuthenticationController {
     public AuthSuccess register(@RequestBody RegisterRequest data) {
         User existing = userRepository.findByEmail(data.getEmail());
         if(existing!=null) {
-            return new AuthSuccess("Username exists!");
+            throw new BadCredentialsException("User already exists!");
         }
 
         User newUser = User.builder()
@@ -56,7 +57,7 @@ public class AuthenticationController {
         if(testUser!=null && passwordEncoder.matches(data.getPassword(), testUser.getPassword())) {
             return new AuthSuccess("Success", testUser.getId());
         }
-        return new AuthSuccess("Login failed!");
+        throw new BadCredentialsException("Login Failed");
     }
 
     @GetMapping("/profile/{userId}")
