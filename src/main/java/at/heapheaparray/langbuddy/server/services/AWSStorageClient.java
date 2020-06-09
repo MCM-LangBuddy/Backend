@@ -45,7 +45,7 @@ public class AWSStorageClient implements StorageClient {
     }
 
     @Override
-    public String uploadCreateCallPicture(MultipartFile file, String fileName) {
+    public String uploadProfilePicture(MultipartFile file, String fileName) {
         return uploadFile(file, fileName, profilePicBucket);
     }
     private String uploadFile(MultipartFile multipartFile, String fileName, String bucketName) {

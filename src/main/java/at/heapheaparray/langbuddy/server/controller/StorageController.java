@@ -13,7 +13,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/storage")
 public class StorageController {
-    private StorageClient storageClient;
+    private final StorageClient storageClient;
     private final UserRepository userRepository;
 
     @Autowired
@@ -23,8 +23,8 @@ public class StorageController {
     }
 
     @PostMapping("/uploadProfilePicture/{userId}")
-    public FileUploadResult uploadCreateCallPicture(@RequestPart(value = "file") MultipartFile file,
-                                                    @PathVariable(name = "userId") Long userId) {
+    public FileUploadResult uploadProfilePicture(@RequestPart(value = "file") MultipartFile file,
+                                                 @PathVariable(name = "userId") Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow();
 
@@ -32,7 +32,7 @@ public class StorageController {
         result.setOriginalFileName(file.getOriginalFilename());
 
         String filename = generateFileName(file, userId);
-        result.setFileURL(this.storageClient.uploadCreateCallPicture(file, filename));
+        result.setFileURL(this.storageClient.uploadProfilePicture(file, filename));
         result.setNewFileName(filename);
 
         if (result.getFileURL() != null) {

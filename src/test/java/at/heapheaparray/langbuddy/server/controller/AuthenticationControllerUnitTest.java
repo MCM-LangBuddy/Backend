@@ -34,11 +34,9 @@ public class AuthenticationControllerUnitTest {
     @MockBean
     private UserRepository userRepository;
 
-    private User testUser;
-
     @BeforeEach
     public void setup() {
-        testUser = User.builder().id(1L)
+        User testUser = User.builder().id(1L)
                 .firstName("Max")
                 .lastName("Mustermann")
                 .email("max.mustermann@gmx.net")
