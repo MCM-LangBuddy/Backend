@@ -65,8 +65,8 @@ public class AuthenticationController {
         User user = userRepository.findById(userId).orElseThrow();
 
         return UserDto.builder().emailAddress(user.getEmail())
-                .learningLanguageDtos(user.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
-                .spokenLanguageDtos(user.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                .learningLanguageDtos(user.getLearningLanguages() != null ? user.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()) : null)
+                .spokenLanguageDtos(user.getSpokenLanguages() != null ? user.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()) : null)
                 .userId(user.getId())
                 .firstName(user.getFirstName())
                 .profilePictureUrl(user.getProfilePictureUrl()).build();
