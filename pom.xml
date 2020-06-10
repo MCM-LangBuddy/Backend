@@ -16,6 +16,10 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<sonar.organization>mcm-langbuddy</sonar.organization>
+		<sonar.projectName>Backend</sonar.projectName>
+		<sonar.projectKey>MCM-LangBuddy_Backend</sonar.projectKey>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
