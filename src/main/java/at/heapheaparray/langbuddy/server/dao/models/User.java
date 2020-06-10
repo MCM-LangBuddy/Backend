@@ -25,10 +25,10 @@ public class User {
     private String profilePictureUrl;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    Set<Language> spokenLanguages = new HashSet<Language>();
+    Set<Language> spokenLanguages = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    Set<Language> learningLanguages = new HashSet<Language>();
+    Set<Language> learningLanguages = new HashSet<>();
 
     @ManyToMany
     @EqualsAndHashCode.Exclude

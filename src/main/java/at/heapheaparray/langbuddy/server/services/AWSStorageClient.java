@@ -64,13 +64,13 @@ public class AWSStorageClient implements StorageClient {
     }
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
+        try (FileOutputStream fos = new FileOutputStream(convFile)) {
+            fos.write(file.getBytes());
+        }
         return convFile;
     }
     private void uploadFileToS3bucket(String fileName, File file, String bucket) {
-        PutObjectResult putObjectResult = s3client.putObject(new PutObjectRequest(bucket, fileName, file)
+        s3client.putObject(new PutObjectRequest(bucket, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
 
