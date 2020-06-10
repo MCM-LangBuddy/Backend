@@ -24,8 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {AuthenticationController.class, AuthenticationControllerUnitTest.PasswordEncoderMock.class})
-public class AuthenticationControllerUnitTest {
+@ContextConfiguration(classes = {AuthenticationController.class, AuthenticationControllerUnitTests.PasswordEncoderMock.class})
+public class AuthenticationControllerUnitTests {
 
     @Autowired
     private PasswordEncoder passwordEncoder;

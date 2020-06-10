@@ -9,5 +9,5 @@ import java.util.Set;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
-    List<User> findAllBySpokenLanguagesInAndIdNotIn(Set<Language> languages, Set<Long> blockedIds);
+    List<User> findDistinctBySpokenLanguagesInAndIdNotIn(Set<Language> languages, Set<Long> blockedIds);
 }

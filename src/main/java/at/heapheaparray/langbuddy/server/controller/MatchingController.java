@@ -6,6 +6,7 @@ import at.heapheaparray.langbuddy.server.dao.repositories.UserRepository;
 import at.heapheaparray.langbuddy.server.dto.response.UserSuggestion;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,12 +25,17 @@ public class MatchingController {
     public List<UserSuggestion> getOpenMatches(@PathVariable(name = "userId") Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
 
-        Set<Long> discardedUsers = new HashSet<>();
-        discardedUsers.add(user.getId());
-        discardedUsers.addAll(user.getDiscardedUsers().stream().map(User::getId).collect(Collectors.toList()));
-        discardedUsers.addAll(user.getMatchedUsers().stream().map(User::getId).collect(Collectors.toList()));
+        Set<Long> userFilter = new HashSet<>();
+        userFilter.add(user.getId());
+        if(user.getDiscardedUsers() != null) {
 
-        return userRepository.findAllBySpokenLanguagesInAndIdNotIn(user.getLearningLanguages(), discardedUsers).stream()
+            userFilter.addAll(user.getDiscardedUsers().stream().map(User::getId).collect(Collectors.toList()));
+        }
+        if(user.getMatchedUsers() != null) {
+            userFilter.addAll(user.getMatchedUsers().stream().map(User::getId).collect(Collectors.toList()));
+        }
+
+        return userRepository.findDistinctBySpokenLanguagesInAndIdNotIn(user.getLearningLanguages(), userFilter).stream()
                 .map(userRaw -> UserSuggestion.builder().emailAddress(userRaw.getEmail())
                     .learningLanguageDtos(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
                     .spokenLanguageDtos(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
@@ -69,10 +75,12 @@ public class MatchingController {
     public List<UserSuggestion> getMatches(@PathVariable(name = "userId") Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
 
+        if(user.getMatchedUsers() == null) return Collections.emptyList();
+
         return user.getMatchedUsers().stream()
                 .map(userRaw -> UserSuggestion.builder().emailAddress(userRaw.getEmail())
-                        .learningLanguageDtos(userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
-                        .spokenLanguageDtos(userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()))
+                        .learningLanguageDtos(userRaw.getLearningLanguages() != null ? userRaw.getLearningLanguages().stream().map(Language::toDto).collect(Collectors.toSet()) : null)
+                        .spokenLanguageDtos(userRaw.getSpokenLanguages() != null ? userRaw.getSpokenLanguages().stream().map(Language::toDto).collect(Collectors.toSet()) : null)
                         .userId(userRaw.getId())
                         .firstName(userRaw.getFirstName())
                         .profilePictureUrl(userRaw.getProfilePictureUrl()).build())
