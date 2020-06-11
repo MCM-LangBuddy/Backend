@@ -21,6 +21,12 @@ jobs:
           java-version: 1.13
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+        env:
+          LANGBUDDY_DB: ${{ secrets.LANGBUDDY_DB }}
+          LANGBUDDY_USERNAME: ${{ secrets.LANGBUDDY_USERNAME }}
+          LANGBUDDY_PW: ${{ secrets.LANGBUDDY_PW }}
+          LANGBUDDY_AWS_KEY_ID: ${{ secrets.LANGBUDDY_AWS_KEY_ID }}
+          LANGBUDDY_AWS_KEY_SEC: ${{ secrets.LANGBUDDY_AWS_KEY_SEC }}
       - name: SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -33,6 +39,12 @@ jobs:
           path: target/server*.jar
       - name: Push to Dockerhub
         uses: docker/build-push-action@v1
+        env:
+          LANGBUDDY_DB: ${{ secrets.LANGBUDDY_DB }}
+          LANGBUDDY_USERNAME: ${{ secrets.LANGBUDDY_USERNAME }}
+          LANGBUDDY_PW: ${{ secrets.LANGBUDDY_PW }}
+          LANGBUDDY_AWS_KEY_ID: ${{ secrets.LANGBUDDY_AWS_KEY_ID }}
+          LANGBUDDY_AWS_KEY_SEC: ${{ secrets.LANGBUDDY_AWS_KEY_SEC }}
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
