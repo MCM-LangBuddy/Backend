@@ -29,8 +29,8 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: langBuddyBackend-$(git rev-parse --short HEAD)
-          path: target/server-0.0.1.jar
+          name: langBuddyBackend
+          path: target/server*.jar
       - name: Push to Dockerhub
         uses: docker/build-push-action@v1
         with:
