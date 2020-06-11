@@ -26,7 +26,17 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn clean verify sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-      - uses: actions/upload-artifact@v2
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
         with:
-          name: langBuddyBackend
+          name: langBuddyBackend-$(git rev-parse --short HEAD)
           path: target/server-0.0.1.jar
+      - name: Push to Dockerhub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: langbuddy/server
+          tag_with_ref: true
+          tag_with_sha: true
+
