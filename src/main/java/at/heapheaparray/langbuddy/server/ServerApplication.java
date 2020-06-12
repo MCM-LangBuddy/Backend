@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @SpringBootApplication
 public class ServerApplication {
 
-	@Value("${application.environment}")
+	@Value("${application.environment:unknown}")
 	private String environment;
 
 	public static void main(String[] args) {
