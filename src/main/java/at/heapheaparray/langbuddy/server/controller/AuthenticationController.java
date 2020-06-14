@@ -28,7 +28,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public AuthSuccess register(@RequestBody RegisterRequest data) {
         User existing = userRepository.findByEmail(data.getEmail());
-        if(existing!=null)
+        if(existing!=null) {
             throw new BadCredentialsException("User already exists!");
         }
 
