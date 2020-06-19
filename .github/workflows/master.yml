@@ -55,7 +55,7 @@ jobs:
       - uses: screendriver/ifttt-action@v1
         with:
           event: build_positive
-          key: iAXu6S-kPL_-ntb878TOGmkW7uWJxscnG16w_UFl4UA
+          key: ${{secrets.IFTTT_KEY}}
 
   negativeifttt:
     needs: build
@@ -67,6 +67,6 @@ jobs:
         with:
           status: failure
           event: build_failed
-          key: iAXu6S-kPL_-ntb878TOGmkW7uWJxscnG16w_UFl4UA
+          key: ${{secrets.IFTTT_KEY}}
         if: env.WORKFLOW_CONCLUSION == 'failure'
 
