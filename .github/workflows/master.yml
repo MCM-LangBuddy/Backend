@@ -30,6 +30,7 @@ jobs:
           name: langBuddyBackend
           path: target/server*.jar
       - name: Push to Dockerhub
+        if: ${{ github.event_name == 'push' }}
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -38,7 +39,8 @@ jobs:
           tag_with_ref: true
           tag_with_sha: true
       - name: Deploy to Heroku (master)
-        uses: akhileshns/heroku-deploy@v3.0.4 # This is the action
+        if: ${{ github.event_name == 'push' }}
+        uses: akhileshns/heroku-deploy@v3.0.4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY_PROD}}
           heroku_app_name: "langbuddy-prod"
