@@ -36,6 +36,7 @@ public class AuthenticationControllerUnitTests {
 
     @BeforeEach
     public void setup() {
+        // Test commit
         User testUser = User.builder().id(1L)
                 .firstName("Max")
                 .lastName("Mustermann")
