@@ -38,9 +38,9 @@ jobs:
           repository: langbuddy/server
           tag_with_ref: true
           tag_with_sha: true
-      - name: Deploy to Heroku (staging)
+      - name: Deploy to Heroku (master)
         if: ${{ github.event_name == 'push' }}
-        uses: akhileshns/heroku-deploy@v3.0.4 # This is the action
+        uses: akhileshns/heroku-deploy@v3.0.4
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY_PROD}}
           heroku_app_name: "langbuddy-prod"
@@ -58,9 +58,9 @@ jobs:
           key: iAXu6S-kPL_-ntb878TOGmkW7uWJxscnG16w_UFl4UA
 
   negativeifttt:
-    needs: build 
+    needs: build
     runs-on: ubuntu-latest
-    if: always() 
+    if: always()
     steps:
       - uses: technote-space/workflow-conclusion-action@v1
       - uses: screendriver/ifttt-action@v1
